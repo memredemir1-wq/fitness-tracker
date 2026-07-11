@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fitness Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💪</text></svg>" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <h1>Fitness Tracker</h1>
+    <nav class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="dashboard" role="tab">Dashboard</button>
+      <button class="tab-btn" data-tab="program" role="tab">Program</button>
+      <button class="tab-btn" data-tab="workouts" role="tab">Workouts</button>
+      <button class="tab-btn" data-tab="diet" role="tab">Diet</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="tab-panel active">
+      <div class="stat-row" id="stat-row"></div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Body weight</h2>
+          <span class="muted">last 30 entries</span>
+        </div>
+        <div id="chart-weight" class="chart-wrap"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Calories per day</h2>
+          <span class="muted">last 14 days</span>
+        </div>
+        <div id="chart-calories" class="chart-wrap"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Calories in vs. estimated burned</h2>
+          <span class="muted">last 14 days &middot; burn is a MET-based estimate, see note below</span>
+        </div>
+        <div id="chart-balance" class="chart-wrap"></div>
+        <p class="chart-footnote">Estimated burn = strength sets &times; ~3 min/set at MET 5.0, plus any logged cardio, &times; your latest logged body weight (assumed kg). It's a rough estimate, not a measured value &mdash; treat it as a trend indicator, not ground truth.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Workout volume</h2>
+          <span class="muted">weight &times; reps, last 14 days</span>
+        </div>
+        <div id="chart-volume" class="chart-wrap"></div>
+      </div>
+    </section>
+
+    <!-- PROGRAM -->
+    <section id="tab-program" class="tab-panel">
+      <div class="card">
+        <div class="card-head"><h2>Split</h2></div>
+        <div id="split-picker" class="pill-row"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Day</h2></div>
+        <div id="day-picker" class="pill-row"></div>
+        <div id="program-day-view"></div>
+      </div>
+    </section>
+
+    <!-- WORKOUTS -->
+    <section id="tab-workouts" class="tab-panel">
+      <div class="card">
+        <div class="card-head"><h2>Log a set</h2></div>
+        <form id="form-workout" class="form-grid">
+          <label>Date
+            <input type="date" name="date" required />
+          </label>
+          <label>Exercise
+            <input type="text" name="exercise" placeholder="e.g. Bench press" required list="exercise-list" />
+            <datalist id="exercise-list"></datalist>
+          </label>
+          <label>Weight (lb/kg)
+            <input type="number" name="weight" min="0" step="0.5" placeholder="0 for bodyweight" required />
+          </label>
+          <label>Reps
+            <input type="number" name="reps" min="1" step="1" required />
+          </label>
+          <button type="submit" class="btn-primary">Add set</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Body weight log</h2>
+        </div>
+        <form id="form-bodyweight" class="form-grid">
+          <label>Date
+            <input type="date" name="date" required />
+          </label>
+          <label>Weight (lb/kg)
+            <input type="number" name="weight" min="0" step="0.1" required />
+          </label>
+          <button type="submit" class="btn-primary">Log weight</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Cardio log</h2>
+        </div>
+        <form id="form-cardio" class="form-grid">
+          <label>Date
+            <input type="date" name="date" required />
+          </label>
+          <label>Activity
+            <select name="activity" required></select>
+          </label>
+          <label>Duration (min)
+            <input type="number" name="minutes" min="1" step="1" required />
+          </label>
+          <button type="submit" class="btn-primary">Log cardio</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>History</h2></div>
+        <div id="workout-history" class="history-list"></div>
+      </div>
+    </section>
+
+    <!-- DIET -->
+    <section id="tab-diet" class="tab-panel">
+      <div class="card">
+        <div class="card-head">
+          <h2>Today's targets</h2>
+          <span class="muted">from your program</span>
+        </div>
+        <div id="goal-bars" class="goal-bars"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Log a meal</h2></div>
+        <form id="form-meal" class="form-grid">
+          <label>Date
+            <input type="date" name="date" required />
+          </label>
+          <label>Meal / food
+            <input type="text" name="name" placeholder="e.g. Chicken & rice" required />
+          </label>
+          <label>Calories
+            <input type="number" name="calories" min="0" step="1" required />
+          </label>
+          <label>Protein (g)
+            <input type="number" name="protein" min="0" step="1" value="0" />
+          </label>
+          <label>Carbs (g)
+            <input type="number" name="carbs" min="0" step="1" value="0" />
+          </label>
+          <label>Fat (g)
+            <input type="number" name="fat" min="0" step="1" value="0" />
+          </label>
+          <button type="submit" class="btn-primary">Add meal</button>
+        </form>
+        <p class="chart-footnote" id="meal-estimate-hint" hidden></p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>History</h2></div>
+        <div id="diet-history" class="history-list"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div id="tooltip" class="chart-tooltip" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
