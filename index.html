@@ -15,6 +15,7 @@
     <nav class="tabs" role="tablist">
       <button class="tab-btn active" data-tab="dashboard" role="tab">Dashboard</button>
       <button class="tab-btn" data-tab="program" role="tab">Program</button>
+      <button class="tab-btn" data-tab="builder" role="tab">Builder</button>
       <button class="tab-btn" data-tab="workouts" role="tab">Workouts</button>
       <button class="tab-btn" data-tab="diet" role="tab">Diet</button>
     </nav>
@@ -63,7 +64,7 @@
     <!-- PROGRAM -->
     <section id="tab-program" class="tab-panel">
       <div class="card">
-        <div class="card-head"><h2>Split</h2></div>
+        <div class="card-head"><h2>Split</h2><span class="muted" id="split-hint"></span></div>
         <div id="split-picker" class="pill-row"></div>
       </div>
 
@@ -72,6 +73,11 @@
         <div id="day-picker" class="pill-row"></div>
         <div id="program-day-view"></div>
       </div>
+    </section>
+
+    <!-- BUILDER -->
+    <section id="tab-builder" class="tab-panel">
+      <div id="builder-root"></div>
     </section>
 
     <!-- WORKOUTS -->
@@ -83,7 +89,10 @@
             <input type="date" name="date" required />
           </label>
           <label>Exercise
-            <input type="text" name="exercise" placeholder="e.g. Bench press" required list="exercise-list" />
+            <span class="exercise-input-row">
+              <input type="text" name="exercise" placeholder="e.g. Bench press" required list="exercise-list" id="workout-exercise-input" />
+              <button type="button" class="btn-secondary exercise-browse-btn" id="workout-exercise-browse">Browse</button>
+            </span>
             <datalist id="exercise-list"></datalist>
           </label>
           <label>Weight (lb/kg)
@@ -182,6 +191,12 @@
 
 <div id="tooltip" class="chart-tooltip" hidden></div>
 
+<script src="exercise-data.js"></script>
 <script src="app.js"></script>
+<script src="exercise-library.js"></script>
+<script src="ui-utils.js"></script>
+<script src="exercise-picker.js"></script>
+<script src="workout-builder.js"></script>
+<script src="browse-integration.js"></script>
 </body>
 </html>

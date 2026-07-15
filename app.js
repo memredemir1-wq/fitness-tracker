@@ -13,6 +13,11 @@ function loadData() {
       exercisePlans: parsed?.exercisePlans || {},
       todayLog: parsed?.todayLog || null,
       settings: { splitKey: '4day', dayIndex: 0, ...(parsed?.settings || {}) },
+      // exercise library + workout builder additions (kept in the same store/save cycle)
+      customExercises: parsed?.customExercises || [],
+      favoriteExerciseIds: parsed?.favoriteExerciseIds || [],
+      recentExerciseIds: parsed?.recentExerciseIds || [],
+      workoutTemplates: parsed?.workoutTemplates || [],
     };
   } catch (e) {
     return {
@@ -24,6 +29,10 @@ function loadData() {
       exercisePlans: {},
       todayLog: null,
       settings: { splitKey: '4day', dayIndex: 0 },
+      customExercises: [],
+      favoriteExerciseIds: [],
+      recentExerciseIds: [],
+      workoutTemplates: [],
     };
   }
 }
@@ -296,6 +305,40 @@ const PROGRAMS = {
     ],
   },
 };
+
+// programs shown in the Program tab: the built-in splits above, plus a
+// synthetic "My Workouts" split whose days are the user's Builder-created
+// templates (data.workoutTemplates) — this lets Builder templates be picked
+// and logged with the exact same split/day/set-editor UI as the built-ins.
+function formatBuilderSetsLabel(item) {
+  const reps = (item.repsTarget || '').toString().trim();
+  return `${item.setsCount || 1} × ${reps || '-'}`;
+}
+
+function formatBuilderRestLabel(item) {
+  const sec = Number(item.restSec) || 0;
+  if (!sec) return '—';
+  return sec % 60 === 0 ? `${sec / 60} min` : `${sec} sec`;
+}
+
+function getAllPrograms() {
+  const programs = { ...PROGRAMS };
+  if (data.workoutTemplates && data.workoutTemplates.length) {
+    programs.custom = {
+      label: 'My Workouts',
+      custom: true,
+      days: data.workoutTemplates.map((t) => ({
+        name: t.name,
+        exercises: t.exercises.map((item) => ({
+          name: item.name,
+          sets: formatBuilderSetsLabel(item),
+          rest: formatBuilderRestLabel(item),
+        })),
+      })),
+    };
+  }
+  return programs;
+}
 
 // ---------- date helpers ----------
 function toDateStr(d) {
@@ -714,7 +757,8 @@ function renderDashboard() {
 // ---------- program tab ----------
 function renderSplitPicker() {
   const container = document.getElementById('split-picker');
-  container.innerHTML = Object.entries(PROGRAMS)
+  const programs = getAllPrograms();
+  container.innerHTML = Object.entries(programs)
     .map(([key, prog]) => `<button class="pill${key === data.settings.splitKey ? ' active' : ''}" data-split="${key}">${prog.label}</button>`)
     .join('');
   container.querySelectorAll('.pill').forEach((pill) => {
@@ -725,10 +769,12 @@ function renderSplitPicker() {
       renderProgram();
     });
   });
+  const hint = document.getElementById('split-hint');
+  if (hint) hint.textContent = programs.custom ? '' : 'Build a custom workout in the Builder tab to see it here';
 }
 
 function renderDayPicker() {
-  const prog = PROGRAMS[data.settings.splitKey];
+  const prog = getAllPrograms()[data.settings.splitKey];
   const container = document.getElementById('day-picker');
   container.innerHTML = prog.days
     .map((day, i) => `<button class="pill${i === data.settings.dayIndex ? ' active' : ''}" data-day="${i}">${day.name}</button>`)
@@ -799,12 +845,14 @@ function renderSetEditor(ex, plan, entryIds) {
 }
 
 function renderProgramDayView() {
-  const prog = PROGRAMS[data.settings.splitKey];
+  const prog = getAllPrograms()[data.settings.splitKey];
   const day = prog.days[data.settings.dayIndex];
   const container = document.getElementById('program-day-view');
 
   if (!day.exercises.length) {
-    container.innerHTML = '<div class="rest-day-note">Rest day &mdash; or light cardio if you want it.</div>';
+    container.innerHTML = prog.custom
+      ? '<div class="rest-day-note">This workout has no exercises yet &mdash; add some in the Builder tab.</div>'
+      : '<div class="rest-day-note">Rest day &mdash; or light cardio if you want it.</div>';
     return;
   }
 
@@ -925,6 +973,20 @@ function renderProgramDayView() {
 }
 
 function renderProgram() {
+  const programs = getAllPrograms();
+  let changed = false;
+  if (!programs[data.settings.splitKey]) {
+    data.settings.splitKey = Object.keys(programs)[0];
+    data.settings.dayIndex = 0;
+    changed = true;
+  } else {
+    const dayCount = programs[data.settings.splitKey].days.length;
+    if (data.settings.dayIndex >= dayCount) {
+      data.settings.dayIndex = Math.max(0, dayCount - 1);
+      changed = true;
+    }
+  }
+  if (changed) saveData();
   renderSplitPicker();
   renderDayPicker();
   renderProgramDayView();
@@ -1214,3 +1276,30 @@ renderDietHistory();
 renderGoalBars();
 renderProgram();
 renderDashboard();
+
+// ---------- public API surface for other scripts ----------
+// exercise-library.js / exercise-picker.js / workout-builder.js load after this file and
+// read/write through this object rather than relying on cross-<script> let/const visibility.
+// `data` is a stable object reference (never reassigned, only mutated), so this stays live.
+window.FTCore = {
+  data,
+  saveData,
+  uid,
+  escapeHtml,
+  todayStr,
+  toDateStr,
+  parseLocalDate,
+  formatShortDate,
+  formatLongDate,
+  daysAgo,
+  lastNDays,
+  cssVar,
+  showTooltip,
+  hideTooltip,
+  GOALS,
+  PROGRAMS,
+  renderLineChart,
+  updateExerciseDatalist,
+  renderWorkoutHistory,
+  getLastWeightForExercise,
+};
