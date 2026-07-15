@@ -54,104 +54,129 @@ const GOALS = { calories: 2450, protein: 192, carbs: 255, fat: 72 };
 // 'per100g' entries scale with a detected gram quantity (default 100g).
 // 'perUnit' entries represent one typical serving/piece and scale with a detected count (default 1).
 const FOOD_DB = [
-  { keywords: ['chicken breast', 'chicken', 'tavuk göğsü', 'tavuk'], calories: 165, protein: 31, carbs: 0, fat: 3.6, basis: 'per100g' },
-  { keywords: ['ground beef', 'kıyma', 'köfte'], calories: 250, protein: 26, carbs: 0, fat: 17, basis: 'per100g' },
-  { keywords: ['steak', 'beef', 'kırmızı et', 'dana eti'], calories: 271, protein: 25, carbs: 0, fat: 19, basis: 'per100g' },
-  { keywords: ['salmon', 'somon'], calories: 208, protein: 20, carbs: 0, fat: 13, basis: 'per100g' },
-  { keywords: ['tuna', 'ton balığı', 'ton balik'], calories: 132, protein: 28, carbs: 0, fat: 1.3, basis: 'per100g' },
-  { keywords: ['fish', 'balık'], calories: 140, protein: 24, carbs: 0, fat: 5, basis: 'per100g' },
-  { keywords: ['egg', 'yumurta'], calories: 78, protein: 6.5, carbs: 0.6, fat: 5.3, basis: 'perUnit' },
-  { keywords: ['greek yogurt', 'süzme yoğurt', 'yogurt', 'yoğurt'], calories: 100, protein: 17, carbs: 6, fat: 0.7, basis: 'per100g' },
-  { keywords: ['cheese', 'peynir'], calories: 110, protein: 7, carbs: 1, fat: 9, basis: 'perUnit' },
-  { keywords: ['milk', 'süt'], calories: 103, protein: 8, carbs: 12, fat: 2.4, basis: 'perUnit' },
-  { keywords: ['rice', 'pirinç', 'pilav'], calories: 205, protein: 4.3, carbs: 45, fat: 0.4, basis: 'perUnit' },
-  { keywords: ['pasta', 'makarna'], calories: 220, protein: 8, carbs: 43, fat: 1.3, basis: 'perUnit' },
-  { keywords: ['oats', 'oatmeal', 'yulaf'], calories: 150, protein: 5, carbs: 27, fat: 3, basis: 'perUnit' },
-  { keywords: ['bread', 'ekmek'], calories: 80, protein: 3, carbs: 15, fat: 1, basis: 'perUnit' },
-  { keywords: ['sweet potato', 'tatlı patates'], calories: 112, protein: 2, carbs: 26, fat: 0.1, basis: 'perUnit' },
-  { keywords: ['potato', 'patates'], calories: 163, protein: 4.3, carbs: 37, fat: 0.2, basis: 'perUnit' },
-  { keywords: ['broccoli', 'brokoli'], calories: 55, protein: 3.7, carbs: 11, fat: 0.6, basis: 'perUnit' },
-  { keywords: ['vegetable', 'sebze', 'salata', 'salad'], calories: 50, protein: 2, carbs: 10, fat: 0.3, basis: 'perUnit' },
-  { keywords: ['banana', 'muz'], calories: 105, protein: 1.3, carbs: 27, fat: 0.4, basis: 'perUnit' },
-  { keywords: ['apple', 'elma'], calories: 95, protein: 0.5, carbs: 25, fat: 0.3, basis: 'perUnit' },
-  { keywords: ['avocado', 'avokado'], calories: 240, protein: 3, carbs: 13, fat: 22, basis: 'perUnit' },
-  { keywords: ['almond', 'badem'], calories: 164, protein: 6, carbs: 6, fat: 14, basis: 'perUnit' },
-  { keywords: ['walnut', 'ceviz'], calories: 185, protein: 4.3, carbs: 4, fat: 18, basis: 'perUnit' },
-  { keywords: ['peanut butter', 'fıstık ezmesi'], calories: 190, protein: 8, carbs: 6, fat: 16, basis: 'perUnit' },
-  { keywords: ['olive oil', 'zeytinyağı'], calories: 119, protein: 0, carbs: 0, fat: 14, basis: 'perUnit' },
-  { keywords: ['protein powder', 'whey', 'protein tozu'], calories: 120, protein: 24, carbs: 3, fat: 1, basis: 'perUnit' },
-  { keywords: ['lentil', 'mercimek'], calories: 230, protein: 18, carbs: 40, fat: 0.8, basis: 'perUnit' },
-  { keywords: ['chickpea', 'nohut'], calories: 269, protein: 15, carbs: 45, fat: 4.2, basis: 'perUnit' },
-  { keywords: ['quinoa'], calories: 222, protein: 8, carbs: 39, fat: 3.6, basis: 'perUnit' },
-  { keywords: ['hummus'], calories: 166, protein: 8, carbs: 14, fat: 10, basis: 'per100g' },
+  { name: 'Chicken Breast', keywords: ['chicken breast', 'chicken', 'tavuk göğsü', 'tavuk'], calories: 165, protein: 31, carbs: 0, fat: 3.6, basis: 'per100g' },
+  { name: 'Chicken Thigh', keywords: ['chicken thigh', 'tavuk but'], calories: 209, protein: 26, carbs: 0, fat: 10.9, basis: 'per100g' },
+  { name: 'Grilled Chicken Breast', keywords: ['grilled chicken breast', 'grilled chicken', 'ızgara tavuk göğsü', 'ızgara tavuk'], calories: 172, protein: 29, carbs: 0, fat: 4.5, basis: 'per100g' },
+  { name: 'Fried Chicken', keywords: ['fried chicken', 'kızarmış tavuk'], calories: 290, protein: 19, carbs: 15, fat: 18, basis: 'per100g' },
+  { name: 'Chicken Wings', keywords: ['chicken wings', 'chicken wing', 'tavuk kanat'], calories: 290, protein: 27, carbs: 0, fat: 19, basis: 'per100g' },
+  { name: 'Rotisserie Chicken', keywords: ['rotisserie chicken', 'çevirme tavuk', 'fırın tavuk'], calories: 239, protein: 27, carbs: 0, fat: 14, basis: 'per100g' },
+  { name: 'Ground Beef', keywords: ['ground beef', 'kıyma', 'köfte'], calories: 250, protein: 26, carbs: 0, fat: 17, basis: 'per100g' },
+  { name: 'Steak', keywords: ['steak', 'beef', 'kırmızı et', 'dana eti'], calories: 271, protein: 25, carbs: 0, fat: 19, basis: 'per100g' },
+  { name: 'Salmon', keywords: ['salmon', 'somon'], calories: 208, protein: 20, carbs: 0, fat: 13, basis: 'per100g' },
+  { name: 'Tuna', keywords: ['tuna', 'ton balığı', 'ton balik'], calories: 132, protein: 28, carbs: 0, fat: 1.3, basis: 'per100g' },
+  { name: 'Fish', keywords: ['fish', 'balık'], calories: 140, protein: 24, carbs: 0, fat: 5, basis: 'per100g' },
+  { name: 'Egg', keywords: ['egg', 'yumurta'], calories: 78, protein: 6.5, carbs: 0.6, fat: 5.3, basis: 'perUnit' },
+  { name: 'Greek Yogurt', keywords: ['greek yogurt', 'süzme yoğurt', 'yogurt', 'yoğurt'], calories: 100, protein: 17, carbs: 6, fat: 0.7, basis: 'per100g' },
+  { name: 'Cheese', keywords: ['cheese', 'peynir'], calories: 110, protein: 7, carbs: 1, fat: 9, basis: 'perUnit' },
+  { name: 'Milk', keywords: ['milk', 'süt'], calories: 103, protein: 8, carbs: 12, fat: 2.4, basis: 'perUnit' },
+  { name: 'Rice', keywords: ['rice', 'pirinç', 'pilav'], calories: 205, protein: 4.3, carbs: 45, fat: 0.4, basis: 'perUnit' },
+  { name: 'Pasta', keywords: ['pasta', 'makarna'], calories: 220, protein: 8, carbs: 43, fat: 1.3, basis: 'perUnit' },
+  { name: 'Oatmeal', keywords: ['oats', 'oatmeal', 'yulaf'], calories: 150, protein: 5, carbs: 27, fat: 3, basis: 'perUnit' },
+  { name: 'Bread', keywords: ['bread', 'ekmek'], calories: 80, protein: 3, carbs: 15, fat: 1, basis: 'perUnit' },
+  { name: 'Sweet Potato', keywords: ['sweet potato', 'tatlı patates'], calories: 112, protein: 2, carbs: 26, fat: 0.1, basis: 'perUnit' },
+  { name: 'Potato', keywords: ['potato', 'patates'], calories: 163, protein: 4.3, carbs: 37, fat: 0.2, basis: 'perUnit' },
+  { name: 'Broccoli', keywords: ['broccoli', 'brokoli'], calories: 55, protein: 3.7, carbs: 11, fat: 0.6, basis: 'perUnit' },
+  { name: 'Salad', keywords: ['vegetable', 'sebze', 'salata', 'salad'], calories: 50, protein: 2, carbs: 10, fat: 0.3, basis: 'perUnit' },
+  { name: 'Banana', keywords: ['banana', 'muz'], calories: 105, protein: 1.3, carbs: 27, fat: 0.4, basis: 'perUnit' },
+  { name: 'Apple', keywords: ['apple', 'elma'], calories: 95, protein: 0.5, carbs: 25, fat: 0.3, basis: 'perUnit' },
+  { name: 'Avocado', keywords: ['avocado', 'avokado'], calories: 240, protein: 3, carbs: 13, fat: 22, basis: 'perUnit' },
+  { name: 'Almonds', keywords: ['almond', 'badem'], calories: 164, protein: 6, carbs: 6, fat: 14, basis: 'perUnit' },
+  { name: 'Walnuts', keywords: ['walnut', 'ceviz'], calories: 185, protein: 4.3, carbs: 4, fat: 18, basis: 'perUnit' },
+  { name: 'Peanut Butter', keywords: ['peanut butter', 'fıstık ezmesi'], calories: 190, protein: 8, carbs: 6, fat: 16, basis: 'perUnit' },
+  { name: 'Olive Oil', keywords: ['olive oil', 'zeytinyağı'], calories: 119, protein: 0, carbs: 0, fat: 14, basis: 'perUnit' },
+  { name: 'Protein Powder', keywords: ['protein powder', 'whey', 'protein tozu'], calories: 120, protein: 24, carbs: 3, fat: 1, basis: 'perUnit' },
+  { name: 'Lentils', keywords: ['lentil', 'mercimek'], calories: 230, protein: 18, carbs: 40, fat: 0.8, basis: 'perUnit' },
+  { name: 'Chickpeas', keywords: ['chickpea', 'nohut'], calories: 269, protein: 15, carbs: 45, fat: 4.2, basis: 'perUnit' },
+  { name: 'Quinoa', keywords: ['quinoa'], calories: 222, protein: 8, carbs: 39, fat: 3.6, basis: 'perUnit' },
+  { name: 'Hummus', keywords: ['hummus'], calories: 166, protein: 8, carbs: 14, fat: 10, basis: 'per100g' },
   // more protein sources
-  { keywords: ['turkey breast', 'hindi göğsü', 'hindi'], calories: 135, protein: 30, carbs: 0, fat: 1, basis: 'per100g' },
-  { keywords: ['shrimp', 'karides'], calories: 99, protein: 24, carbs: 0.2, fat: 0.3, basis: 'per100g' },
-  { keywords: ['tofu'], calories: 76, protein: 8, carbs: 1.9, fat: 4.8, basis: 'per100g' },
-  { keywords: ['sausage', 'sosis'], calories: 300, protein: 12, carbs: 3, fat: 27, basis: 'per100g' },
-  { keywords: ['beyaz peynir', 'feta'], calories: 264, protein: 18, carbs: 3, fat: 21, basis: 'per100g' },
-  { keywords: ['cottage cheese', 'lor peyniri', 'lor'], calories: 98, protein: 11, carbs: 3.4, fat: 4.3, basis: 'per100g' },
-  { keywords: ['ayran'], calories: 70, protein: 3, carbs: 5, fat: 3.5, basis: 'perUnit' },
+  { name: 'Turkey Breast', keywords: ['turkey breast', 'hindi göğsü', 'hindi'], calories: 135, protein: 30, carbs: 0, fat: 1, basis: 'per100g' },
+  { name: 'Shrimp', keywords: ['shrimp', 'karides'], calories: 99, protein: 24, carbs: 0.2, fat: 0.3, basis: 'per100g' },
+  { name: 'Tofu', keywords: ['tofu'], calories: 76, protein: 8, carbs: 1.9, fat: 4.8, basis: 'per100g' },
+  { name: 'Sausage', keywords: ['sausage', 'sosis'], calories: 300, protein: 12, carbs: 3, fat: 27, basis: 'per100g' },
+  { name: 'Feta Cheese', keywords: ['beyaz peynir', 'feta'], calories: 264, protein: 18, carbs: 3, fat: 21, basis: 'per100g' },
+  { name: 'Cottage Cheese', keywords: ['cottage cheese', 'lor peyniri', 'lor'], calories: 98, protein: 11, carbs: 3.4, fat: 4.3, basis: 'per100g' },
+  { name: 'Ayran', keywords: ['ayran'], calories: 70, protein: 3, carbs: 5, fat: 3.5, basis: 'perUnit' },
   // legumes & grains
-  { keywords: ['black beans', 'siyah fasulye'], calories: 227, protein: 15, carbs: 41, fat: 0.9, basis: 'perUnit' },
-  { keywords: ['kuru fasulye', 'white beans', 'beyaz fasulye'], calories: 300, protein: 15, carbs: 45, fat: 6, basis: 'perUnit' },
-  { keywords: ['bulgur'], calories: 180, protein: 6.5, carbs: 38, fat: 0.5, basis: 'perUnit' },
-  { keywords: ['couscous'], calories: 176, protein: 6, carbs: 36, fat: 0.3, basis: 'perUnit' },
-  { keywords: ['corn', 'mısır'], calories: 132, protein: 5, carbs: 29, fat: 2, basis: 'perUnit' },
-  { keywords: ['granola'], calories: 200, protein: 5, carbs: 30, fat: 8, basis: 'perUnit' },
+  { name: 'Black Beans', keywords: ['black beans', 'siyah fasulye'], calories: 227, protein: 15, carbs: 41, fat: 0.9, basis: 'perUnit' },
+  { name: 'White Beans', keywords: ['kuru fasulye', 'white beans', 'beyaz fasulye'], calories: 300, protein: 15, carbs: 45, fat: 6, basis: 'perUnit' },
+  { name: 'Bulgur', keywords: ['bulgur'], calories: 180, protein: 6.5, carbs: 38, fat: 0.5, basis: 'perUnit' },
+  { name: 'Couscous', keywords: ['couscous'], calories: 176, protein: 6, carbs: 36, fat: 0.3, basis: 'perUnit' },
+  { name: 'Corn', keywords: ['corn', 'mısır'], calories: 132, protein: 5, carbs: 29, fat: 2, basis: 'perUnit' },
+  { name: 'Granola', keywords: ['granola'], calories: 200, protein: 5, carbs: 30, fat: 8, basis: 'perUnit' },
   // vegetables
-  { keywords: ['spinach', 'ıspanak'], calories: 41, protein: 5, carbs: 7, fat: 0.5, basis: 'perUnit' },
-  { keywords: ['carrot', 'havuç'], calories: 25, protein: 0.6, carbs: 6, fat: 0.1, basis: 'perUnit' },
-  { keywords: ['cucumber', 'salatalık'], calories: 45, protein: 2, carbs: 11, fat: 0.3, basis: 'perUnit' },
-  { keywords: ['tomato', 'domates'], calories: 22, protein: 1, carbs: 5, fat: 0.2, basis: 'perUnit' },
-  { keywords: ['onion', 'soğan'], calories: 44, protein: 1.2, carbs: 10, fat: 0.1, basis: 'perUnit' },
-  { keywords: ['pepper', 'biber'], calories: 24, protein: 1, carbs: 6, fat: 0.2, basis: 'perUnit' },
-  { keywords: ['zeytin', 'olives', 'olive'], calories: 50, protein: 0.3, carbs: 3, fat: 4.5, basis: 'perUnit' },
+  { name: 'Spinach', keywords: ['spinach', 'ıspanak'], calories: 41, protein: 5, carbs: 7, fat: 0.5, basis: 'perUnit' },
+  { name: 'Carrot', keywords: ['carrot', 'havuç'], calories: 25, protein: 0.6, carbs: 6, fat: 0.1, basis: 'perUnit' },
+  { name: 'Cucumber', keywords: ['cucumber', 'salatalık'], calories: 45, protein: 2, carbs: 11, fat: 0.3, basis: 'perUnit' },
+  { name: 'Tomato', keywords: ['tomato', 'domates'], calories: 22, protein: 1, carbs: 5, fat: 0.2, basis: 'perUnit' },
+  { name: 'Onion', keywords: ['onion', 'soğan'], calories: 44, protein: 1.2, carbs: 10, fat: 0.1, basis: 'perUnit' },
+  { name: 'Bell Pepper', keywords: ['pepper', 'biber'], calories: 24, protein: 1, carbs: 6, fat: 0.2, basis: 'perUnit' },
+  { name: 'Olives', keywords: ['zeytin', 'olives', 'olive'], calories: 50, protein: 0.3, carbs: 3, fat: 4.5, basis: 'perUnit' },
   // fruits
-  { keywords: ['orange', 'portakal'], calories: 62, protein: 1.2, carbs: 15, fat: 0.2, basis: 'perUnit' },
-  { keywords: ['grapes', 'üzüm'], calories: 104, protein: 1, carbs: 27, fat: 0.2, basis: 'perUnit' },
-  { keywords: ['watermelon', 'karpuz'], calories: 46, protein: 1, carbs: 11.5, fat: 0.2, basis: 'perUnit' },
-  { keywords: ['strawberry', 'çilek'], calories: 49, protein: 1, carbs: 12, fat: 0.5, basis: 'perUnit' },
-  { keywords: ['pineapple', 'ananas'], calories: 82, protein: 0.9, carbs: 22, fat: 0.2, basis: 'perUnit' },
-  { keywords: ['mandarin', 'mandalina'], calories: 47, protein: 0.7, carbs: 12, fat: 0.3, basis: 'perUnit' },
-  { keywords: ['kiwi'], calories: 42, protein: 0.8, carbs: 10, fat: 0.4, basis: 'perUnit' },
-  { keywords: ['fig', 'incir'], calories: 37, protein: 0.4, carbs: 10, fat: 0.1, basis: 'perUnit' },
+  { name: 'Orange', keywords: ['orange', 'portakal'], calories: 62, protein: 1.2, carbs: 15, fat: 0.2, basis: 'perUnit' },
+  { name: 'Grapes', keywords: ['grapes', 'üzüm'], calories: 104, protein: 1, carbs: 27, fat: 0.2, basis: 'perUnit' },
+  { name: 'Watermelon', keywords: ['watermelon', 'karpuz'], calories: 46, protein: 1, carbs: 11.5, fat: 0.2, basis: 'perUnit' },
+  { name: 'Strawberry', keywords: ['strawberry', 'çilek'], calories: 49, protein: 1, carbs: 12, fat: 0.5, basis: 'perUnit' },
+  { name: 'Pineapple', keywords: ['pineapple', 'ananas'], calories: 82, protein: 0.9, carbs: 22, fat: 0.2, basis: 'perUnit' },
+  { name: 'Mandarin', keywords: ['mandarin', 'mandalina'], calories: 47, protein: 0.7, carbs: 12, fat: 0.3, basis: 'perUnit' },
+  { name: 'Kiwi', keywords: ['kiwi'], calories: 42, protein: 0.8, carbs: 10, fat: 0.4, basis: 'perUnit' },
+  { name: 'Fig', keywords: ['fig', 'incir'], calories: 37, protein: 0.4, carbs: 10, fat: 0.1, basis: 'perUnit' },
   // fats & spreads
-  { keywords: ['bal', 'honey'], calories: 64, protein: 0, carbs: 17, fat: 0, basis: 'perUnit' },
-  { keywords: ['reçel', 'jam'], calories: 50, protein: 0, carbs: 13, fat: 0, basis: 'perUnit' },
-  { keywords: ['butter', 'tereyağı'], calories: 102, protein: 0.1, carbs: 0, fat: 11.5, basis: 'perUnit' },
+  { name: 'Honey', keywords: ['bal', 'honey'], calories: 64, protein: 0, carbs: 17, fat: 0, basis: 'perUnit' },
+  { name: 'Jam', keywords: ['reçel', 'jam'], calories: 50, protein: 0, carbs: 13, fat: 0, basis: 'perUnit' },
+  { name: 'Butter', keywords: ['butter', 'tereyağı'], calories: 102, protein: 0.1, carbs: 0, fat: 11.5, basis: 'perUnit' },
   // Turkish dishes & bakery
-  { keywords: ['döner', 'doner'], calories: 250, protein: 18, carbs: 12, fat: 15, basis: 'per100g' },
-  { keywords: ['lahmacun'], calories: 285, protein: 11, carbs: 40, fat: 9, basis: 'perUnit' },
-  { keywords: ['pide'], calories: 300, protein: 10, carbs: 45, fat: 8, basis: 'perUnit' },
-  { keywords: ['mantı'], calories: 450, protein: 20, carbs: 55, fat: 15, basis: 'perUnit' },
-  { keywords: ['mercimek çorbası', 'lentil soup'], calories: 150, protein: 8, carbs: 22, fat: 3, basis: 'perUnit' },
-  { keywords: ['çorba', 'soup'], calories: 120, protein: 5, carbs: 15, fat: 4, basis: 'perUnit' },
-  { keywords: ['simit'], calories: 300, protein: 10, carbs: 52, fat: 6, basis: 'perUnit' },
-  { keywords: ['poğaça'], calories: 280, protein: 6, carbs: 34, fat: 13, basis: 'perUnit' },
-  { keywords: ['börek'], calories: 320, protein: 9, carbs: 30, fat: 18, basis: 'perUnit' },
-  { keywords: ['baklava'], calories: 330, protein: 5, carbs: 40, fat: 18, basis: 'perUnit' },
-  { keywords: ['künefe'], calories: 400, protein: 8, carbs: 45, fat: 20, basis: 'perUnit' },
-  { keywords: ['kebap', 'şiş kebap', 'kebab'], calories: 280, protein: 24, carbs: 5, fat: 18, basis: 'per100g' },
-  { keywords: ['dürüm', 'wrap'], calories: 450, protein: 20, carbs: 45, fat: 20, basis: 'perUnit' },
+  { name: 'Döner', keywords: ['döner', 'doner'], calories: 250, protein: 18, carbs: 12, fat: 15, basis: 'per100g' },
+  { name: 'Lahmacun', keywords: ['lahmacun'], calories: 285, protein: 11, carbs: 40, fat: 9, basis: 'perUnit' },
+  { name: 'Pide', keywords: ['pide'], calories: 300, protein: 10, carbs: 45, fat: 8, basis: 'perUnit' },
+  { name: 'Mantı', keywords: ['mantı'], calories: 450, protein: 20, carbs: 55, fat: 15, basis: 'perUnit' },
+  { name: 'Lentil Soup', keywords: ['mercimek çorbası', 'lentil soup'], calories: 150, protein: 8, carbs: 22, fat: 3, basis: 'perUnit' },
+  { name: 'Soup', keywords: ['çorba', 'soup'], calories: 120, protein: 5, carbs: 15, fat: 4, basis: 'perUnit' },
+  { name: 'Simit', keywords: ['simit'], calories: 300, protein: 10, carbs: 52, fat: 6, basis: 'perUnit' },
+  { name: 'Poğaça', keywords: ['poğaça'], calories: 280, protein: 6, carbs: 34, fat: 13, basis: 'perUnit' },
+  { name: 'Börek', keywords: ['börek'], calories: 320, protein: 9, carbs: 30, fat: 18, basis: 'perUnit' },
+  { name: 'Baklava', keywords: ['baklava'], calories: 330, protein: 5, carbs: 40, fat: 18, basis: 'perUnit' },
+  { name: 'Künefe', keywords: ['künefe'], calories: 400, protein: 8, carbs: 45, fat: 20, basis: 'perUnit' },
+  { name: 'Kebab', keywords: ['kebap', 'şiş kebap', 'kebab'], calories: 280, protein: 24, carbs: 5, fat: 18, basis: 'per100g' },
+  { name: 'Wrap', keywords: ['dürüm', 'wrap'], calories: 450, protein: 20, carbs: 45, fat: 20, basis: 'perUnit' },
   // fast food & snacks
-  { keywords: ['pizza'], calories: 285, protein: 12, carbs: 36, fat: 10, basis: 'perUnit' },
-  { keywords: ['burger', 'hamburger'], calories: 354, protein: 17, carbs: 29, fat: 17, basis: 'perUnit' },
-  { keywords: ['french fries', 'patates kızartması'], calories: 365, protein: 4, carbs: 48, fat: 17, basis: 'perUnit' },
-  { keywords: ['chips', 'cips'], calories: 152, protein: 2, carbs: 15, fat: 10, basis: 'perUnit' },
-  { keywords: ['popcorn', 'patlamış mısır'], calories: 31, protein: 1, carbs: 6, fat: 0.4, basis: 'perUnit' },
-  { keywords: ['ice cream', 'dondurma'], calories: 137, protein: 2, carbs: 16, fat: 7, basis: 'perUnit' },
-  { keywords: ['cookie', 'kurabiye'], calories: 150, protein: 2, carbs: 20, fat: 7, basis: 'perUnit' },
-  { keywords: ['dark chocolate', 'bitter çikolata', 'chocolate', 'çikolata'], calories: 170, protein: 2, carbs: 13, fat: 12, basis: 'perUnit' },
-  { keywords: ['protein bar'], calories: 200, protein: 20, carbs: 20, fat: 7, basis: 'perUnit' },
-  { keywords: ['granola bar'], calories: 120, protein: 2, carbs: 22, fat: 4, basis: 'perUnit' },
+  { name: 'Pizza', keywords: ['pizza'], calories: 285, protein: 12, carbs: 36, fat: 10, basis: 'perUnit' },
+  { name: 'Burger', keywords: ['burger', 'hamburger'], calories: 354, protein: 17, carbs: 29, fat: 17, basis: 'perUnit' },
+  { name: 'French Fries', keywords: ['french fries', 'patates kızartması'], calories: 365, protein: 4, carbs: 48, fat: 17, basis: 'perUnit' },
+  { name: 'Chips', keywords: ['chips', 'cips'], calories: 152, protein: 2, carbs: 15, fat: 10, basis: 'perUnit' },
+  { name: 'Popcorn', keywords: ['popcorn', 'patlamış mısır'], calories: 31, protein: 1, carbs: 6, fat: 0.4, basis: 'perUnit' },
+  { name: 'Ice Cream', keywords: ['ice cream', 'dondurma'], calories: 137, protein: 2, carbs: 16, fat: 7, basis: 'perUnit' },
+  { name: 'Cookie', keywords: ['cookie', 'kurabiye'], calories: 150, protein: 2, carbs: 20, fat: 7, basis: 'perUnit' },
+  { name: 'Dark Chocolate', keywords: ['dark chocolate', 'bitter çikolata', 'chocolate', 'çikolata'], calories: 170, protein: 2, carbs: 13, fat: 12, basis: 'perUnit' },
+  { name: 'Protein Bar', keywords: ['protein bar'], calories: 200, protein: 20, carbs: 20, fat: 7, basis: 'perUnit' },
+  { name: 'Granola Bar', keywords: ['granola bar'], calories: 120, protein: 2, carbs: 22, fat: 4, basis: 'perUnit' },
   // beverages
-  { keywords: ['soda', 'kola', 'cola'], calories: 140, protein: 0, carbs: 39, fat: 0, basis: 'perUnit' },
-  { keywords: ['orange juice', 'portakal suyu'], calories: 110, protein: 2, carbs: 26, fat: 0.5, basis: 'perUnit' },
-  { keywords: ['beer', 'bira'], calories: 153, protein: 1.6, carbs: 13, fat: 0, basis: 'perUnit' },
-  { keywords: ['wine', 'şarap'], calories: 125, protein: 0.1, carbs: 4, fat: 0, basis: 'perUnit' },
-  { keywords: ['latte', 'sütlü kahve'], calories: 120, protein: 6, carbs: 10, fat: 5, basis: 'perUnit' },
+  { name: 'Soda', keywords: ['soda', 'kola', 'cola'], calories: 140, protein: 0, carbs: 39, fat: 0, basis: 'perUnit' },
+  { name: 'Orange Juice', keywords: ['orange juice', 'portakal suyu'], calories: 110, protein: 2, carbs: 26, fat: 0.5, basis: 'perUnit' },
+  { name: 'Beer', keywords: ['beer', 'bira'], calories: 153, protein: 1.6, carbs: 13, fat: 0, basis: 'perUnit' },
+  { name: 'Wine', keywords: ['wine', 'şarap'], calories: 125, protein: 0.1, carbs: 4, fat: 0, basis: 'perUnit' },
+  { name: 'Latte', keywords: ['latte', 'sütlü kahve'], calories: 120, protein: 6, carbs: 10, fat: 5, basis: 'perUnit' },
 ];
+
+// ranked multi-result search for the autocomplete dropdown (progressive typing) —
+// distinct from findFoodMatch below, which picks a single best match out of free text
+function searchFoodDB(query, limit) {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  const scored = [];
+  FOOD_DB.forEach((entry) => {
+    let bestRank = null;
+    entry.keywords.forEach((kw) => {
+      const idx = kw.indexOf(q);
+      if (idx === -1) return;
+      const rank = (idx === 0 ? 0 : 1000) + idx;
+      if (bestRank === null || rank < bestRank) bestRank = rank;
+    });
+    if (bestRank !== null) scored.push({ entry, rank: bestRank });
+  });
+  scored.sort((a, b) => a.rank - b.rank || a.entry.name.localeCompare(b.entry.name));
+  return scored.slice(0, limit || 8).map((s) => s.entry);
+}
 
 function findFoodMatch(name) {
   const lower = name.toLowerCase();
@@ -1221,11 +1246,12 @@ document.getElementById('form-meal').addEventListener('submit', (e) => {
   setDefaultDates();
   Object.keys(mealTouched).forEach((k) => { mealTouched[k] = false; });
   mealEstimateHint.hidden = true;
+  closeMealSearchDropdown();
   renderDietHistory();
   renderGoalBars();
 });
 
-// ---------- meal calorie/macro auto-estimate ----------
+// ---------- meal name search dropdown + calorie/macro auto-fill on selection ----------
 const mealTouched = { calories: false, protein: false, carbs: false, fat: false };
 const mealNameInput = document.querySelector('#form-meal input[name="name"]');
 const mealFieldInputs = {
@@ -1235,22 +1261,118 @@ const mealFieldInputs = {
   fat: document.querySelector('#form-meal input[name="fat"]'),
 };
 const mealEstimateHint = document.getElementById('meal-estimate-hint');
+const mealSearchDropdown = document.getElementById('meal-search-dropdown');
 
 Object.entries(mealFieldInputs).forEach(([key, input]) => {
   input.addEventListener('input', () => { mealTouched[key] = true; });
 });
 
-mealNameInput.addEventListener('input', () => {
-  const estimate = estimateNutrition(mealNameInput.value);
-  if (!estimate) {
-    mealEstimateHint.hidden = true;
+function applyFoodEstimate(entry) {
+  const estimate = estimateNutrition(entry.name);
+  if (!estimate) return;
+  Object.entries(mealFieldInputs).forEach(([key, input]) => {
+    input.value = estimate[key];
+    mealTouched[key] = false;
+  });
+  mealEstimateHint.textContent = `≈ auto-filled from "${entry.name}" — edit any field if it's off`;
+  mealEstimateHint.hidden = false;
+}
+
+function highlightFoodMatch(text, query) {
+  const idx = query ? text.toLowerCase().indexOf(query.toLowerCase()) : -1;
+  if (idx === -1) return escapeHtml(text);
+  return `${escapeHtml(text.slice(0, idx))}<mark>${escapeHtml(text.slice(idx, idx + query.length))}</mark>${escapeHtml(text.slice(idx + query.length))}`;
+}
+
+let mealSearchResults = [];
+let mealSearchActiveIndex = -1;
+let mealSearchTimer = null;
+
+function closeMealSearchDropdown() {
+  mealSearchDropdown.hidden = true;
+  mealSearchDropdown.innerHTML = '';
+  mealSearchResults = [];
+  mealSearchActiveIndex = -1;
+  mealNameInput.setAttribute('aria-expanded', 'false');
+  mealNameInput.removeAttribute('aria-activedescendant');
+}
+
+function setMealSearchActive(index) {
+  mealSearchActiveIndex = index;
+  mealSearchDropdown.querySelectorAll('.food-search-item').forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
+  });
+  if (index >= 0) {
+    mealNameInput.setAttribute('aria-activedescendant', `meal-search-opt-${index}`);
+    mealSearchDropdown.children[index].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function selectMealSearchResult(index) {
+  const entry = mealSearchResults[index];
+  if (!entry) return;
+  mealNameInput.value = entry.name;
+  applyFoodEstimate(entry);
+  closeMealSearchDropdown();
+}
+
+function renderMealSearchDropdown(query, results, loading) {
+  mealSearchResults = results;
+  mealSearchActiveIndex = -1;
+  mealNameInput.setAttribute('aria-expanded', 'true');
+  mealSearchDropdown.hidden = false;
+
+  if (loading) {
+    mealSearchDropdown.innerHTML = '<div class="food-search-status">Searching…</div>';
     return;
   }
-  Object.entries(mealFieldInputs).forEach(([key, input]) => {
-    if (!mealTouched[key]) input.value = estimate[key];
+  if (!results.length) {
+    mealSearchDropdown.innerHTML = '<div class="food-search-status">No foods found</div>';
+    return;
+  }
+  mealSearchDropdown.innerHTML = results
+    .map((entry, i) => `<button type="button" class="food-search-item" id="meal-search-opt-${i}" role="option" data-index="${i}">
+        <span class="food-search-name">${highlightFoodMatch(entry.name, query)}</span>
+        <span class="food-search-meta">${entry.calories} kcal${entry.basis === 'per100g' ? ' /100g' : ''}</span>
+      </button>`)
+    .join('');
+  mealSearchDropdown.querySelectorAll('.food-search-item').forEach((btn) => {
+    btn.addEventListener('mouseenter', () => setMealSearchActive(Number(btn.dataset.index)));
+    btn.addEventListener('click', () => selectMealSearchResult(Number(btn.dataset.index)));
   });
-  mealEstimateHint.textContent = `≈ auto-estimated from "${mealNameInput.value.trim()}" — edit any field if it's off`;
-  mealEstimateHint.hidden = false;
+}
+
+mealNameInput.addEventListener('input', () => {
+  mealEstimateHint.hidden = true; // stale until a fresh selection is made
+  const query = mealNameInput.value.trim();
+  clearTimeout(mealSearchTimer);
+  if (!query) { closeMealSearchDropdown(); return; }
+  renderMealSearchDropdown(query, [], true);
+  mealSearchTimer = setTimeout(() => {
+    renderMealSearchDropdown(query, searchFoodDB(query, 8), false);
+  }, 300);
+});
+
+mealNameInput.addEventListener('keydown', (e) => {
+  if (mealSearchDropdown.hidden || !mealSearchResults.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    setMealSearchActive((mealSearchActiveIndex + 1) % mealSearchResults.length);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    setMealSearchActive((mealSearchActiveIndex - 1 + mealSearchResults.length) % mealSearchResults.length);
+  } else if (e.key === 'Enter' && mealSearchActiveIndex >= 0) {
+    e.preventDefault();
+    selectMealSearchResult(mealSearchActiveIndex);
+  } else if (e.key === 'Escape') {
+    closeMealSearchDropdown();
+  }
+});
+
+// let a dropdown item's click register before blur closes the dropdown
+mealNameInput.addEventListener('blur', () => setTimeout(closeMealSearchDropdown, 150));
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.food-search-wrap')) closeMealSearchDropdown();
 });
 
 function setDefaultDates() {

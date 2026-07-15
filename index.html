@@ -168,7 +168,10 @@
             <input type="date" name="date" required />
           </label>
           <label>Meal / food
-            <input type="text" name="name" placeholder="e.g. Chicken & rice" required />
+            <span class="food-search-wrap">
+              <input type="text" name="name" placeholder="e.g. Chicken Breast" required autocomplete="off" id="meal-name-input" role="combobox" aria-expanded="false" aria-controls="meal-search-dropdown" aria-autocomplete="list" />
+              <div class="food-search-dropdown" id="meal-search-dropdown" role="listbox" hidden></div>
+            </span>
           </label>
           <label>Calories
             <input type="number" name="calories" min="0" step="1" required />
