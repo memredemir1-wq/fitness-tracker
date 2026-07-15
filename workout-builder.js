@@ -74,6 +74,33 @@
     list.splice(before ? toIdx : toIdx + 1, 0, moved);
   }
 
+  // tap-friendly reorder (drag & drop needs a mouse — this is the touch-device
+  // equivalent, wired to the same ▲/▼ buttons rendered next to the drag handle)
+  function moveItem(list, idKey, id, direction) {
+    const idx = list.findIndex((x) => x[idKey] === id);
+    if (idx === -1) return;
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= list.length) return;
+    const [item] = list.splice(idx, 1);
+    list.splice(newIdx, 0, item);
+  }
+
+  function reorderBtnsHtml(id, isFirst, isLast) {
+    return `<span class="wb-reorder-btns">
+      <button type="button" class="wb-move-btn" data-action="move-up" data-id="${esc(id)}" aria-label="Move up" ${isFirst ? 'disabled' : ''}>▲</button>
+      <button type="button" class="wb-move-btn" data-action="move-down" data-id="${esc(id)}" aria-label="Move down" ${isLast ? 'disabled' : ''}>▼</button>
+    </span>`;
+  }
+
+  function wireMoveButtons(container, list, idKey, onMoved) {
+    container.querySelectorAll('[data-action="move-up"]').forEach((btn) => {
+      btn.addEventListener('click', () => { moveItem(list, idKey, btn.dataset.id, -1); onMoved(); });
+    });
+    container.querySelectorAll('[data-action="move-down"]').forEach((btn) => {
+      btn.addEventListener('click', () => { moveItem(list, idKey, btn.dataset.id, 1); onMoved(); });
+    });
+  }
+
   // ---------- top-level render dispatch ----------
   function render() {
     const root = document.getElementById('builder-root');
@@ -96,10 +123,11 @@
     return entries.map(([g, n]) => `<span class="ep-badge">${esc(g)} ${n}</span>`).join('');
   }
 
-  function templateCardHtml(t) {
+  function templateCardHtml(t, isFirst, isLast) {
     return `
       <div class="wb-template-card" draggable="true" data-id="${esc(t.id)}">
         <span class="wb-drag-handle" title="Drag to reorder">⠿</span>
+        ${reorderBtnsHtml(t.id, isFirst, isLast)}
         <button type="button" class="wb-template-info" data-action="open" data-id="${esc(t.id)}">
           <div class="wb-template-name">${esc(t.name)}</div>
           <div class="wb-template-meta">${t.exercises.length} exercise${t.exercises.length === 1 ? '' : 's'} &middot; ${muscleChipSummary(t)}</div>
@@ -121,7 +149,7 @@
           <button type="button" class="btn-primary" id="wb-new-template">+ New Workout</button>
         </div>
         <div class="wb-template-list" id="wb-template-list">
-          ${list.length ? list.map(templateCardHtml).join('') : '<div class="chart-empty">No custom workouts yet — build one from any of the ' + Lib.getAll().length.toLocaleString() + ' exercises in the library.</div>'}
+          ${list.length ? list.map((t, i) => templateCardHtml(t, i === 0, i === list.length - 1)).join('') : '<div class="chart-empty">No custom workouts yet — build one from any of the ' + Lib.getAll().length.toLocaleString() + ' exercises in the library.</div>'}
         </div>
       </div>
       <div class="card">
@@ -153,6 +181,7 @@
       core.saveData();
       render();
     });
+    wireMoveButtons(listEl, templates(), 'id', () => { core.saveData(); render(); });
 
     root.querySelector('#wb-export').addEventListener('click', exportData);
     root.querySelector('#wb-import-btn').addEventListener('click', () => root.querySelector('#wb-import-file').click());
@@ -256,7 +285,7 @@
     </div>`;
   }
 
-  function exerciseCardHtml(item, ex) {
+  function exerciseCardHtml(item, ex, isFirst, isLast) {
     const badges = ex
       ? `<span class="ep-badge">${esc(ex.muscleGroup)}</span><span class="ep-badge">${esc(ex.equipment)}</span>`
       : '<span class="ep-badge">Unknown exercise</span>';
@@ -264,6 +293,7 @@
       <div class="wb-exercise-card" draggable="true" data-uid="${esc(item.uid)}">
         <div class="wb-exercise-head">
           <span class="wb-drag-handle" title="Drag to reorder">⠿</span>
+          ${reorderBtnsHtml(item.uid, isFirst, isLast)}
           <div class="wb-exercise-title">
             <span class="wb-exercise-name">${esc(item.name)}</span>
             <span class="ep-row-badges">${badges}</span>
@@ -304,7 +334,7 @@
         </div>
         <div class="wb-exercise-list" id="wb-exercise-list">
           ${template.exercises.length
-            ? template.exercises.map((item) => exerciseCardHtml(item, Lib.getById(item.exerciseId))).join('')
+            ? template.exercises.map((item, i) => exerciseCardHtml(item, Lib.getById(item.exerciseId), i === 0, i === template.exercises.length - 1)).join('')
             : '<div class="chart-empty">No exercises yet. Click "+ Add Exercise" (or press /) to browse the library.</div>'}
         </div>
       </div>
@@ -411,6 +441,11 @@
 
     makeSortable(listEl, '.wb-exercise-card', (draggedId, targetId, before) => {
       reorderById(template.exercises, 'uid', draggedId, targetId, before);
+      template.updatedAt = Date.now();
+      core.saveData();
+      render();
+    });
+    wireMoveButtons(listEl, template.exercises, 'uid', () => {
       template.updatedAt = Date.now();
       core.saveData();
       render();

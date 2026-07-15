@@ -801,6 +801,22 @@ body.modal-open { overflow: hidden; }
 .wb-drag-handle { color: var(--text-muted); cursor: grab; font-size: 16px; padding: 0 4px; flex-shrink: 0; }
 .wb-drag-handle:active { cursor: grabbing; }
 
+/* tap-friendly reorder buttons — the touch-device equivalent of dragging the handle above */
+.wb-reorder-btns { display: flex; flex-direction: column; gap: 1px; flex-shrink: 0; }
+.wb-move-btn {
+  appearance: none;
+  border: 1px solid var(--gridline);
+  background: var(--page);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 9px;
+  line-height: 1;
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+.wb-move-btn:hover:not(:disabled) { border-color: var(--series-1); color: var(--series-1); }
+.wb-move-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
 .wb-template-info {
   flex: 1;
   min-width: 0;
